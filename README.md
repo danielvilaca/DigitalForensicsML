@@ -1,5 +1,10 @@
-<h1 align="center"> Digital Forensics using Machine Learning (Kmeans) </h1>
+# <h1 align="center"> Digital Forensics using Machine Learning </h1>
+<h2 align="center">Using K-means Clustering to analyze Email content</h2> 
 
 <br>
 
-> Dataset: https://www.kaggle.com/datasets/wcukierski/enron-email-dataset
+> Kaggle Dataset: https://www.kaggle.com/datasets/wcukierski/enron-email-dataset
+
+<br>
+
+
