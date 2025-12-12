@@ -16,8 +16,9 @@ stop_words = _stop_words.ENGLISH_STOP_WORDS
 aditional_stopwords = ["0f", "attached", "cc", "com", "corp", "doc", "ect", "ees", "email",
                        "enron","enronxgate", "forwarded","hou","mail","message","na","new","original","pm",
                        "recipient", "said","sent","subject","year","2000","2001"]
-
 smallnum_stopwords = [str(i).zfill(2) for i in range(100)]
+stop_words = stop_words.union(smallnum_stopwords)
+stop_words = stop_words.union(aditional_stopwords)
 cvect = CountVectorizer(stop_words=list(stop_words))
 X_train_matrix = cvect.fit_transform(df['message'].astype(str))
 kmeans = KMeans(n_clusters=10, random_state=42, n_init=10)
