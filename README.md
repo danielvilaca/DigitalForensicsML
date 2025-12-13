@@ -7,4 +7,7 @@
 
 <br>
 
+<p align="center">
+  <img src = "https://github.com/danielvilaca/DigitalForensicsML/blob/main/email_clusters_visualisation.png">
+</p>
 
