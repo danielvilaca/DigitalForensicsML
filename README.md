@@ -3,7 +3,9 @@
 
 <br>
 
-> Kaggle Dataset: https://www.kaggle.com/datasets/wcukierski/enron-email-dataset
+> Unsupervised Dataset: https://www.kaggle.com/datasets/wcukierski/enron-email-dataset
+
+> Supervised Dataset: 'enron_spam_data_label.csv'
 
 <br>
 
