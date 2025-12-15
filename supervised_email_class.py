@@ -35,14 +35,32 @@ models = {
     "SVM (Linear)": SVC()
 }
 
-for name, model in models.items():
-    print(f"Training mode {name}, standby...")
-    start_time = perf_counter()
-    model.fit(X_train, y_train)
-    end_time = perf_counter()
-    time_taken = end_time - start_time
-    print(f"Training time: {time_taken:.2f} secs")
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Accuracy Percentage: {accuracy*100:.2f}%")
-    print(f"-----------------------------------------")
+# for name, model in models.items():
+#     print(f"Training mode {name}, standby...")
+#     start_time = perf_counter()
+#     model.fit(X_train, y_train)
+#     end_time = perf_counter()
+#     time_taken = end_time - start_time
+#     print(f"Training time: {time_taken:.2f} secs")
+#     y_pred = model.predict(X_test)
+#     accuracy = accuracy_score(y_test, y_pred)
+#     print(f"Accuracy Percentage: {accuracy*100:.2f}%")
+#     print(f"-----------------------------------------")
+
+#model tuning
+parameters = {'alpha': [0.1, 1.0, 10], 'fit_prior': [True, False]}
+
+grid_test = GridSearchCV(MultinomialNB(), param_grid=parameters)
+grid_test.fit(X_train, y_train)
+print(f"Best Parameters: {grid_test.best_params_}")
+
+best_alpha = grid_test.best_params_['alpha']
+best_fit_prior = grid_test.best_params_['fit_prior']
+
+final_model = MultinomialNB(alpha=best_alpha, fit_prior=best_fit_prior)
+
+final_model.fit(X_train, y_train)
+y_pred = final_model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Tunes Accuracy Percentage: {accuracy*100:.2f}%")
+print(classification_report(y_test, y_pred))
