@@ -7,9 +7,7 @@
 
 > Supervised Dataset: 'enron_spam_data_label.csv'
 
-<br>
+> Graphic Image Classification Dataset: Public DaSCIS.es Image Dataset
 
-<p align="center">
-  <img src = "https://github.com/danielvilaca/DigitalForensicsML/blob/main/email_clusters_visualisation.png">
-</p>
+<br>
 
