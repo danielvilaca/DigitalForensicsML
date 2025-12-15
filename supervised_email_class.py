@@ -64,3 +64,15 @@ y_pred = final_model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Tunes Accuracy Percentage: {accuracy*100:.2f}%")
 print(classification_report(y_test, y_pred))
+
+#spam email test
+#test_email = "Dear Sir/Madam, I am an African Prince, in need of your assistance to transfer $10 million to your bank account. Kindly send me your bank details."
+test_email = "Hi Bob, I think we need to speak about the California numbers before the meeting. $10 million is not enough. Steve"
+test_email_transformed = cvect.transform([test_email])
+
+y_pred = final_model.predict(test_email_transformed)
+
+if y_pred[0] == 1:
+    print("This email is classified as SPAM!")
+else:
+    print("This email is classified as NOT SPAM!")
