@@ -14,7 +14,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report
 
 #importing email data
-df = pd.read_csv('./enron_spam_data_label.csv')
+df = pd.read_csv('./Datasets/enron_spam_data_label.csv')
 print(df.shape)
 df = df.dropna()
 print(df.shape)
