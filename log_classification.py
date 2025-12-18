@@ -65,22 +65,34 @@ models = {
     'SVM (Linear)': LinearSVC(dual=False)
 }
 
-for name, model in models.items():
-    print(f"Training mode {name}, standby...")
-    start_time = perf_counter()
-    model.fit(X_train, y_train)
-    end_time = perf_counter()
-    time_taken = end_time - start_time
-    print(f"Training time: {time_taken:.2f} secs")
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Accuracy Percentage: {accuracy*100:.2f}%")
-    print(f"-----------------------------------------")
+# for name, model in models.items():
+#     print(f"Training mode {name}, standby...")
+#     start_time = perf_counter()
+#     model.fit(X_train, y_train)
+#     end_time = perf_counter()
+#     time_taken = end_time - start_time
+#     print(f"Training time: {time_taken:.2f} secs")
+#     y_pred = model.predict(X_test)
+#     accuracy = accuracy_score(y_test, y_pred)
+#     print(f"Accuracy Percentage: {accuracy*100:.2f}%")
+#     print(f"-----------------------------------------")
 
-# model = LinearSVC(dual=False, random_state=42, max_iter=50000)
-# final_model = model.fit(X_train, y_train)
-# y_pred = final_model.predict(X_test)
+model = DecisionTreeClassifier()
+final_model = model.fit(X_train, y_train)
+y_pred = final_model.predict(X_test)
 
 # test_url = pd.Series('www.G00gle.com/someevil.php')
 # print(final_model.predict(vect.transform(test_url))[0])
 
+
+#Confusion Matrix - Matplot + Seaborn
+cols = list(final_model.classes_)
+ax = plt.subplot()
+CM_LR = confusion_matrix(y_test, y_pred)
+sns.heatmap(CM_LR, annot=True, fmt='.1f', ax=ax, cmap='RdBu')
+ax.set_xlabel('Predicted Labels')
+ax.set_ylabel('True Labels')
+ax.set_title('Confusion Matrix')
+ax.xaxis.set_ticklabels(cols)
+ax.yaxis.set_ticklabels(cols)
+plt.show()
