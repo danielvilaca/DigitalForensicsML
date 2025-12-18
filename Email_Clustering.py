@@ -9,7 +9,7 @@ from wordcloud import WordCloud
 
 
 #importing email dataset
-df = pd.read_csv('./emails.csv')
+df = pd.read_csv('./Datasets/emails.csv')
 print(df.shape)
 df = df.dropna()
 print(df.shape)
