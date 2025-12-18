@@ -14,8 +14,8 @@ from scipy.sparse import hstack
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import MultinomialNB
 from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
 
 from time import perf_counter
 from sklearn.metrics import accuracy_score, confusion_matrix
@@ -54,59 +54,74 @@ def extract_features(url):
 #data load
 data = pd.read_csv('./Datasets/url_data_mega_deep_learning_checked.csv')
 data.columns = ['text', 'label']
+y = data['label']
 
 # plt.figure
 # data['label'].value_counts().plot(kind='pie', autopct='%1.0f%%')
 # plt.title('Labels')
 # plt.show()
 
-vect = TfidfVectorizer()
-X = vect.fit_transform(data['text'])
-y = data['label']
+print("Vectorizing text (TF-IDF)...")
+vect = TfidfVectorizer(analyzer='char', ngram_range=(3, 5), max_features=5000)
+X_tfidf = vect.fit_transform(data['text'])
 
 
-data = pd.concat([data, data['text'].apply(lambda x: pd.Series(extract_features(x)))], axis=1)
-X = data.drop(columns=['text', 'label'])
-#print(X.head())
+#data = pd.concat([data, data['text'].apply(lambda x: pd.Series(extract_features(x)))], axis=1)
+data = data['text'].apply(lambda x: pd.Series(extract_features(x)))
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=True, random_state=42)
+scaler = StandardScaler()
+X_manual_scaled = scaler.fit_transform(data)
+
+X_final = hstack([X_tfidf, X_manual_scaled])
+
+X_train, X_test, y_train, y_test = train_test_split(X_final, y, test_size=0.2, shuffle=True, random_state=42)
 
 models = {
-    'Decision Tree': DecisionTreeClassifier(),
+    'Decision Tree': DecisionTreeClassifier(max_depth=30),
+    'Random Forest': RandomForestClassifier(n_estimators=100, n_jobs=-1),
     'Logistic Regression': LogisticRegression(max_iter=1000),
     'KNN': KNeighborsClassifier(),
-    'MNB': MultinomialNB(),
     'SVM (Linear)': LinearSVC(dual=False)
 }
 
-for name, model in models.items():
-    print(f"Training mode {name}, standby...")
-    start_time = perf_counter()
-    model.fit(X_train, y_train)
-    end_time = perf_counter()
-    time_taken = end_time - start_time
-    print(f"Training time: {time_taken:.2f} secs")
-    y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    print(f"Accuracy Percentage: {accuracy*100:.2f}%")
-    print(f"-----------------------------------------")
+# for name, model in models.items():
+#     print(f"Training mode {name}, standby...")
+#     start_time = perf_counter()
+#     model.fit(X_train, y_train)
+#     end_time = perf_counter()
+#     time_taken = end_time - start_time
+#     print(f"Training time: {time_taken:.2f} secs")
+#     y_pred = model.predict(X_test)
+#     accuracy = accuracy_score(y_test, y_pred)
+#     print(f"Accuracy Percentage: {accuracy*100:.2f}%")
+#     print(f"-----------------------------------------")
 
-model = DecisionTreeClassifier()
+
+model = RandomForestClassifier()
 final_model = model.fit(X_train, y_train)
 y_pred = final_model.predict(X_test)
 
-# test_url = pd.Series('www.G00gle.com/someevil.php')
-# print(final_model.predict(vect.transform(test_url))[0])
+
+test_url = 'www.G00gle.com/someevil.php'
+single_df = pd.DataFrame({'text': [test_url]})
+single_tfidf = vect.transform(single_df['text'])
+single_manual = single_df['text'].apply(lambda x: pd.Series(extract_features(x)))
+single_manual_scaled = scaler.transform(single_manual)
+single_final_features = hstack([single_tfidf, single_manual_scaled])
+
+prediction = final_model.predict(single_final_features)[0]
+print(f"\nURL: {test_url}")
+print(f"Prediction: {prediction}")
 
 
 #Confusion Matrix - Matplot + Seaborn
-cols = list(final_model.classes_)
-ax = plt.subplot()
-CM_LR = confusion_matrix(y_test, y_pred)
-sns.heatmap(CM_LR, annot=True, fmt='.1f', ax=ax, cmap='RdBu')
-ax.set_xlabel('Predicted Labels')
-ax.set_ylabel('True Labels')
-ax.set_title('Confusion Matrix')
-ax.xaxis.set_ticklabels(cols)
-ax.yaxis.set_ticklabels(cols)
-plt.show()
+# cols = list(final_model.classes_)
+# ax = plt.subplot()
+# CM_LR = confusion_matrix(y_test, y_pred)
+# sns.heatmap(CM_LR, annot=True, fmt='.1f', ax=ax, cmap='RdBu')
+# ax.set_xlabel('Predicted Labels')
+# ax.set_ylabel('True Labels')
+# ax.set_title(f'Confusion Matrix - {model}')
+# ax.xaxis.set_ticklabels(cols)
+# ax.yaxis.set_ticklabels(cols)
+# plt.show()
