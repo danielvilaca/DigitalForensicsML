@@ -1,5 +1,7 @@
 # <h1 align="center"> Digital Forensics using Machine Learning </h1>
-<h2 align="center">Using K-means Clustering to analyze Email content</h2> 
+- <h3>Analyzing Email Content with Kmeans & MNB</h3> 
+- <h3>Analyzing Images with LinearSVC (Grayscale + Hog)</h3> 
+
 
 <br>
 
